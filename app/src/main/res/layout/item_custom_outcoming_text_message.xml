@@ -46,6 +46,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/imageQuoteItem"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintStart_toEndOf="@+id/viewItem"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="4dp"
+                android:visibility="gone"
+                />
+
             <TextView
                 android:id="@+id/txtUserItem"
                 android:layout_width="wrap_content"
@@ -55,7 +66,7 @@
                 android:textStyle="bold"
                 android:layout_marginStart="4dp"
                 app:layout_constraintBottom_toTopOf="@+id/txtQuotedMsgItem"
-                app:layout_constraintStart_toEndOf="@+id/viewItem"
+                app:layout_constraintStart_toEndOf="@+id/imageQuoteItem"
                 app:layout_constraintTop_toTopOf="parent"
                 />
 
@@ -68,7 +79,7 @@
                 android:padding="4dp"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                app:layout_constraintStart_toEndOf="@+id/viewItem"
+                app:layout_constraintStart_toEndOf="@+id/imageQuoteItem"
                 app:layout_constraintTop_toBottomOf="@+id/txtUserItem" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

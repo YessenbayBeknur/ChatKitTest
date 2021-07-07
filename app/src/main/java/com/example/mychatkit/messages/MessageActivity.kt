@@ -1,6 +1,7 @@
 package com.example.mychatkit.messages
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -22,6 +23,7 @@ import com.stfalcon.chatkit.messages.MessageInput.AttachmentsListener
 import com.stfalcon.chatkit.messages.MessageInput.InputListener
 import com.stfalcon.chatkit.messages.MessagesList
 import com.stfalcon.chatkit.messages.MessagesListAdapter
+import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -64,7 +66,15 @@ class MessageActivity: AppCompatActivity(),
 
         val messageSwipeController = MessageSwipeController(this, object : SwipeControllerActions {
             override fun showReplyUI(position: View) {
-                showQuotedMessage((position as RelativeLayout).findViewById<TextView>(R.id.messageText).text.toString() , input, (position as RelativeLayout).findViewById<TextView>(R.id.userName).text.toString() )
+                val txt: TextView? =  (position as RelativeLayout).findViewById<TextView>(R.id.messageText)
+                val quoteImage: ImageView? = (position as RelativeLayout).findViewById(R.id.image)
+                if (txt != null) {
+                    showQuotedMessage((position as RelativeLayout).findViewById<TextView>(R.id.messageText).text.toString() , input,
+                        position.findViewById<TextView>(R.id.userName).text.toString())
+                } else if (quoteImage != null){
+                    showQuotedMessage("photo", input,
+                        position.findViewById<TextView>(R.id.userName).text.toString() ,(position as RelativeLayout).findViewById<ImageView>(R.id.image).drawable)
+                }
             }
         })
 
@@ -82,10 +92,18 @@ class MessageActivity: AppCompatActivity(),
         isQuoted = false
     }
 
-    private fun showQuotedMessage(message: String, messageInput: MessageInput, userName: String) {
+    private fun showQuotedMessage(message: String, messageInput: MessageInput, userName: String, drawable: Drawable? = null) {
         messageInput.requestFocus()
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(messageInput, InputMethodManager.SHOW_IMPLICIT)
+        val quoteImage: ImageView = findViewById(R.id.imageQuote)
+        if (drawable != null){
+            quoteImage.setImageDrawable(drawable)
+            quoteImage.visibility = View.VISIBLE
+        }
+        else {
+            quoteImage.visibility = View.GONE
+        }
         val txtQuotedMsg: TextView = findViewById(R.id.txtQuotedMsg)
         val reply_layout: ConstraintLayout = findViewById(R.id.reply_layout)
         val txtUser: TextView = findViewById(R.id.txtUser)
@@ -94,7 +112,9 @@ class MessageActivity: AppCompatActivity(),
         reply_layout.visibility = View.VISIBLE
 
         isQuoted = true
-        quotedMessage = QuotedMessage("0", userName, message)
+        quotedMessage = QuotedMessage("0", userName, message, drawable)
+
+        Log.i("AAAA", "$quotedMessage")
     }
 
     override fun onSubmit(input: CharSequence): Boolean {
@@ -110,7 +130,14 @@ class MessageActivity: AppCompatActivity(),
     }
 
     override fun onAddAttachments() {
-        messagesAdapter!!.addToStart(MessagesFixtures().imageMessage, true)
+        if (isQuoted){
+            messagesAdapter!!.addToStart(
+                MessagesFixtures().getQuotedMessage(null, quotedMessage!!, you), true)
+                hideReplyLayout()
+        } else {
+            messagesAdapter!!.addToStart(
+                MessagesFixtures().getQuotedMessage(null ,null, you), true)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

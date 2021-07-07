@@ -23,8 +23,12 @@ class MessagesFixtures: FixturesData() {
             return Message(getRandomId(), user, text)
         }
 
-        fun getQuotedMessage(text: String?, quotedMessage: QuotedMessage, user: User): Message {
-            return Message(getRandomId(), user, text, quotedMessage=quotedMessage)
+        fun getQuotedMessage(text: String?, quotedMessage: QuotedMessage?, user: User): Message {
+            val message = Message(getRandomId(), user, text, quotedMessage=quotedMessage)
+            if(text == null) {
+                message.setImage(getRandomImage()?.let { Message.Image(it) })
+            }
+            return message
         }
 
         fun getMessages(startDate: Date?, dialog: Dialog): ArrayList<Message> {
@@ -33,9 +37,17 @@ class MessagesFixtures: FixturesData() {
                 val countPerDay: Int = rnd.nextInt(5) + 1
                 for (j in 0 until countPerDay) {
                     val even: Boolean = rnd.nextBoolean()
-                    var message: Message
-                    message = if (i % 2 == 0 && j % 3 == 0) {
-                        imageMessage
+                    var message = if (i % 2 == 0 && j % 3 == 0) {
+                        if (even) {
+                            val message = Message(getRandomId(), dialog.users?.get((0..dialog.users?.size!!-1).random()), getRandomMessage(),
+                                quotedMessage = QuotedMessage("a",dialog.users?.get((0..dialog.users?.size!!-1).random())?.getName()!!,getRandomMessage()))
+                            message.setImage(getRandomImage()?.let { Message.Image(it) })
+                            message
+                        } else {
+                            val message = Message(getRandomId(), dialog.users?.get((0..dialog.users?.size!!-1).random()), getRandomMessage())
+                            message.setImage(getRandomImage()?.let { Message.Image(it) })
+                            message
+                        }
                     } else {
                         if (even) {
                             Message(getRandomId(), dialog.users?.get((0..dialog.users?.size!!-1).random()), getRandomMessage(),

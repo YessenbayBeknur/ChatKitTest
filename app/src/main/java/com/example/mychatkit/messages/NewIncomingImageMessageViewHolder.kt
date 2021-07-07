@@ -1,21 +1,33 @@
 package com.example.mychatkit.messages
 
+import android.util.Log
 import android.view.View
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.mychatkit.R
 import com.example.mychatkit.model.Message
+import com.example.mychatkit.model.QuotedMessage
 import com.stfalcon.chatkit.messages.MessageHolders.IncomingImageMessageViewHolder
 
 class NewIncomingImageMessageViewHolder(itemView: View): IncomingImageMessageViewHolder<Message>(itemView){
-
-    //private var onlineIndicator: View? = itemView.findViewById(R.id.onlineIndicator)
+    private var username: TextView? = itemView?.findViewById(R.id.userName)
+    private var usernameQuote: TextView? = itemView?.findViewById(R.id.txtUserItem)
+    private var txt: TextView? = itemView?.findViewById(R.id.txtQuotedMsgItem)
+    private var reply: ConstraintLayout? = itemView?.findViewById(R.id.reply_layoutItem)
 
     override fun onBind(message: Message) {
         super.onBind(message)
-        val isOnline: Boolean = message.getUser()?.isOnline()!!
-        /*if (isOnline) {
-            onlineIndicator!!.setBackgroundResource(R.drawable.shape_bubble_online)
-        } else {
-            onlineIndicator!!.setBackgroundResource(R.drawable.shape_bubble_offline)
-        }*/
+        username?.text = message.user?.name
+
+        val quotedMessage: QuotedMessage? = message.getQuoted()
+
+        Log.i("AAAA", "$quotedMessage")
+
+        if (quotedMessage != null){
+            usernameQuote?.text = quotedMessage.userName
+            txt?.text = quotedMessage.text
+            reply?.visibility = View.VISIBLE
+        }
+        else reply?.visibility = View.GONE
     }
 }
