@@ -1,12 +1,13 @@
 package com.example.mychatkit.model
 
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MessagesFixtures: FixturesData() {
         val imageMessage: Message
             get() {
                 val message = Message(getRandomId(), user, null)
-                message.setImage(Message.Image(getRandomImage()))
+                message.setImage(getRandomImage()?.let { Message.Image(it) })
                 return message
             }
         val voiceMessage: Message
@@ -16,22 +17,31 @@ class MessagesFixtures: FixturesData() {
                 return message
             }
         val textMessage: Message
-            get() = getTextMessage(getRandomMessage())
+            get() = getTextMessage(getRandomMessage(), user)
 
-        fun getTextMessage(text: String?): Message {
+        fun getTextMessage(text: String?, user: User): Message {
             return Message(getRandomId(), user, text)
         }
 
-        fun getMessages(startDate: Date?): ArrayList<Message> {
+        fun getQuotedMessage(text: String?, quotedMessage: QuotedMessage, user: User): Message {
+            return Message(getRandomId(), user, text, quotedMessage=quotedMessage)
+        }
+
+        fun getMessages(startDate: Date?, dialog: Dialog): ArrayList<Message> {
             val messages: ArrayList<Message> = ArrayList<Message>()
             for (i in 0..9) {
                 val countPerDay: Int = rnd.nextInt(5) + 1
                 for (j in 0 until countPerDay) {
+                    val even: Boolean = rnd.nextBoolean()
                     var message: Message
                     message = if (i % 2 == 0 && j % 3 == 0) {
                         imageMessage
                     } else {
-                        textMessage
+                        if (even) {
+                            Message(getRandomId(), dialog.users?.get((0..dialog.users?.size!!-1).random()), getRandomMessage(),
+                                quotedMessage = QuotedMessage("a",dialog.users?.get((0..dialog.users?.size!!-1).random())?.getName()!!,getRandomMessage()))
+                        } else
+                            Message(getRandomId(), dialog.users?.get((0..dialog.users?.size!!-1).random()), getRandomMessage())
                     }
                     val calendar = Calendar.getInstance()
                     if (startDate != null) calendar.time = startDate

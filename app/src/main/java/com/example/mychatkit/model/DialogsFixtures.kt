@@ -7,7 +7,7 @@ class DialogsFixtures: FixturesData() {
         throw AssertionError()
     }
 
-    fun getDialogs(): ArrayList<Dialog>? {
+    fun getDialogs(): ArrayList<Dialog> {
         val chats: ArrayList<Dialog> = ArrayList<Dialog>()
         for (i in 0..19) {
             val calendar = Calendar.getInstance()

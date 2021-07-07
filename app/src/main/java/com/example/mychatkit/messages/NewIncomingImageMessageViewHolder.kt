@@ -7,15 +7,15 @@ import com.stfalcon.chatkit.messages.MessageHolders.IncomingImageMessageViewHold
 
 class NewIncomingImageMessageViewHolder(itemView: View): IncomingImageMessageViewHolder<Message>(itemView){
 
-    private var onlineIndicator: View? = itemView.findViewById(R.id.onlineIndicator)
+    //private var onlineIndicator: View? = itemView.findViewById(R.id.onlineIndicator)
 
     override fun onBind(message: Message) {
         super.onBind(message)
-        val isOnline: Boolean = message.getUser().isOnline()
-        if (isOnline) {
+        val isOnline: Boolean = message.getUser()?.isOnline()!!
+        /*if (isOnline) {
             onlineIndicator!!.setBackgroundResource(R.drawable.shape_bubble_online)
         } else {
             onlineIndicator!!.setBackgroundResource(R.drawable.shape_bubble_offline)
-        }
+        }*/
     }
 }

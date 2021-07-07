@@ -9,7 +9,6 @@ class NewOutcomingImageMessageViewHolder(itemView: View?): OutcomingImageMessage
 
     override fun onBind(message: Message) {
         super.onBind(message)
-        time.setText(message.getStatus().toString() + " " + time.getText())
     }
 
     //Override this method to have ability to pass custom data in ImageLoader for loading image(not avatar).

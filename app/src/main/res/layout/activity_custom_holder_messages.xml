@@ -1,42 +1,103 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/gray_dark">
 
     <com.stfalcon.chatkit.messages.MessagesList
         android:id="@+id/messagesList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/input"
+        android:layout_height="0dp"
         app:incomingAvatarHeight="56dp"
         app:incomingAvatarWidth="56dp"
-        app:incomingBubbleDrawable="@drawable/bg_custom_incoming_message"
-        app:outcomingBubbleDrawable="@drawable/bg_custom_outcoming_message"
+        app:incomingBubbleDrawable="@drawable/incoming_bubble_back"
+        app:layout_constraintBottom_toTopOf="@+id/reply_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:outcomingBubbleDrawable="@drawable/outcoming_bubble_back"
         app:outcomingTimeTextColor="@color/gray_dark_transparent" />
 
-    <View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:layout_above="@+id/input"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:background="@color/gray_light" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/reply_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/reply_background"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/input">
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="2dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="14dp"
+            android:background="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtUser"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginStart="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/txtQuotedMsg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.509" />
+
+        <TextView
+            android:id="@+id/txtQuotedMsg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:padding="4dp"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/cancelButton"
+            app:layout_constraintStart_toEndOf="@+id/view" />
+
+        <ImageButton
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/ic_baseline_close_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.stfalcon.chatkit.messages.MessageInput
-    android:id="@+id/input"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"
-    app:attachmentButtonBackground="?attr/selectableItemBackgroundBorderless"
-    app:attachmentButtonDefaultIconColor="@color/green"
-    app:attachmentButtonDefaultIconPressedColor="@color/green_dark"
-    app:attachmentButtonHeight="27dp"
-    app:attachmentButtonWidth="27dp"
-    app:inputButtonBackground="@drawable/bg_custom_layout_send"
-    app:inputButtonDefaultIconColor="@color/white"
-    app:inputButtonDefaultIconDisabledColor="@color/white60"
-    app:inputHint="text"
-    app:showAttachmentButton="true" />
+        android:id="@+id/input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray_light"
+        android:layout_alignParentBottom="true"
+        app:attachmentButtonBackground="?attr/selectableItemBackgroundBorderless"
+        app:attachmentButtonDefaultIconColor="@color/green"
+        app:attachmentButtonDefaultIconPressedColor="@color/green_dark"
+        app:attachmentButtonHeight="27dp"
+        app:attachmentButtonWidth="27dp"
+        app:inputButtonBackground="@drawable/bg_custom_layout_send"
+        app:inputButtonDefaultIconColor="@color/white"
+        app:inputButtonDefaultIconDisabledColor="@color/white60"
+        app:inputHint="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:showAttachmentButton="true" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

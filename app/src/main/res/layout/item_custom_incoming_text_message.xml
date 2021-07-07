@@ -8,37 +8,82 @@
     android:layout_marginRight="16dp"
     android:layout_marginTop="8dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@id/messageUserAvatar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="8dp"
-        />
-
-    <!--this view is needed for custom holder-->
-    <ImageView
-        android:id="@+id/onlineIndicator"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_alignEnd="@id/messageUserAvatar"
-        android:layout_alignTop="@id/messageUserAvatar"
-        android:layout_marginEnd="5dp"
-        />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@id/bubble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:layout_toEndOf="@id/messageUserAvatar"
-        android:orientation="vertical">
+        android:layout_marginEnd="30dp">
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="2dp"
+            android:text="wwwwwwwwwwwww"
+            android:textStyle="bold"
+            android:layout_marginEnd="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/reply_layoutItem"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="2dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/userName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/messageText"
+            >
+
+            <View
+                android:id="@+id/viewItem"
+                android:layout_width="2dp"
+                android:layout_height="0dp"
+                android:background="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txtUserItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginStart="4dp"
+                app:layout_constraintBottom_toTopOf="@+id/txtQuotedMsgItem"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/viewItem"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/txtQuotedMsgItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:maxLines="2"
+                android:padding="4dp"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/viewItem"
+                app:layout_constraintTop_toBottomOf="@+id/txtUserItem" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <TextView
             android:id="@id/messageText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:paddingStart="2dp"
+            android:text="aaaaaaaaaaaaaaaaaaaaaaaa"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/reply_layoutItem" />
 
         <TextView
             android:id="@id/messageTime"

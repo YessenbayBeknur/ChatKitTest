@@ -2,13 +2,14 @@ package com.example.mychatkit.dialogs
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mychatkit.NewDialogViewHolder
 import com.example.mychatkit.R
-import com.example.mychatkit.model.Dialog
 import com.example.mychatkit.model.DialogsFixtures
 import com.example.mychatkit.messages.MessageActivity
+import com.example.mychatkit.model.Dialog
 import com.squareup.picasso.Picasso
 import com.stfalcon.chatkit.commons.ImageLoader
 import com.stfalcon.chatkit.dialogs.DialogsList
@@ -28,11 +29,12 @@ class MainActivity: AppCompatActivity(), DialogsListAdapter.OnDialogClickListene
     }
 
     override fun onDialogClick(dialog: Dialog?) {
+        Log.i("MSG", "${dialog?.users}")
         startActivity(
             Intent(
                 applicationContext,
                 MessageActivity::class.java
-            )
+            ).apply { putExtra("dialog",dialog) }
         )
     }
 

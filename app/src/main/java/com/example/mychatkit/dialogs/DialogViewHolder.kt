@@ -9,10 +9,10 @@ class NewDialogViewHolder(itemView: View?) : DialogsListAdapter.DialogViewHolder
 
     override fun onBind(dialog: Dialog) {
         super.onBind(dialog)
-        if (dialog.users.size > 1) {
+        if (dialog.users?.size!! > 1) {
             onlineIndicator!!.visibility = View.GONE
         } else {
-            val isOnline = dialog.users[0].isOnline
+            val isOnline = dialog.users?.get(0)?.isOnline()!!
             onlineIndicator!!.visibility = View.VISIBLE
             if (isOnline) {
                 onlineIndicator!!.setBackgroundResource(R.drawable.shape_bubble_online)

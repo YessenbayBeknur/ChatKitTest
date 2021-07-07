@@ -1,15 +1,19 @@
 package com.example.mychatkit.messages
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ImageView
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.mychatkit.*
-import com.example.mychatkit.model.Message
-import com.example.mychatkit.model.MessagesFixtures
+import com.example.mychatkit.model.*
 import com.squareup.picasso.Picasso
 import com.stfalcon.chatkit.commons.ImageLoader
 import com.stfalcon.chatkit.messages.MessageHolders
@@ -20,6 +24,7 @@ import com.stfalcon.chatkit.messages.MessagesList
 import com.stfalcon.chatkit.messages.MessagesListAdapter
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MessageActivity: AppCompatActivity(),
     InputListener, AttachmentsListener, MessagesListAdapter.SelectionListener,
@@ -32,26 +37,75 @@ class MessageActivity: AppCompatActivity(),
     protected var imageLoader: ImageLoader? = null
     protected var messagesAdapter: MessagesListAdapter<Message>? = null
 
+    private val you = User("0","Beka", "", false)
+
+    var messages = ArrayList<Message>()
+
+    lateinit var dialog: Dialog
     private var menu: Menu? = null
     var selectionCount = 0
     private var lastLoadedDate: Date? = null
+
+    var quotedMessage: QuotedMessage? = null
+    var isQuoted: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_custom_holder_messages)
         messagesList = findViewById(R.id.messagesList)
+
+        dialog = intent.getParcelableExtra<Dialog>("dialog")!!
         initAdapter()
         val input: MessageInput = findViewById(R.id.input)
         input.setInputListener(this)
         input.setAttachmentsListener(this)
         input.setTypingListener(this)
         onLoadMore(1,1)
+
+        val messageSwipeController = MessageSwipeController(this, object : SwipeControllerActions {
+            override fun showReplyUI(position: View) {
+                showQuotedMessage((position as RelativeLayout).findViewById<TextView>(R.id.messageText).text.toString() , input, (position as RelativeLayout).findViewById<TextView>(R.id.userName).text.toString() )
+            }
+        })
+
+        val itemTouchHelper = ItemTouchHelper(messageSwipeController)
+        itemTouchHelper.attachToRecyclerView(messagesList)
+
+        findViewById<ImageButton>(R.id.cancelButton).setOnClickListener {
+            hideReplyLayout()
+        }
+
+    }
+
+    private fun hideReplyLayout() {
+        findViewById<ConstraintLayout>(R.id.reply_layout).visibility = View.GONE
+        isQuoted = false
+    }
+
+    private fun showQuotedMessage(message: String, messageInput: MessageInput, userName: String) {
+        messageInput.requestFocus()
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.showSoftInput(messageInput, InputMethodManager.SHOW_IMPLICIT)
+        val txtQuotedMsg: TextView = findViewById(R.id.txtQuotedMsg)
+        val reply_layout: ConstraintLayout = findViewById(R.id.reply_layout)
+        val txtUser: TextView = findViewById(R.id.txtUser)
+        txtUser.text = userName
+        txtQuotedMsg.text = message
+        reply_layout.visibility = View.VISIBLE
+
+        isQuoted = true
+        quotedMessage = QuotedMessage("0", userName, message)
     }
 
     override fun onSubmit(input: CharSequence): Boolean {
-        messagesAdapter!!.addToStart(
-            MessagesFixtures().getTextMessage(input.toString()), true
-        )
+        if (isQuoted){
+            messagesAdapter!!.addToStart(
+                MessagesFixtures().getQuotedMessage(input.toString(), quotedMessage!!, you), true)
+                hideReplyLayout()
+        } else {
+            messagesAdapter!!.addToStart(
+                MessagesFixtures().getTextMessage(input.toString(),you), true)
+        }
         return true
     }
 
@@ -90,7 +144,7 @@ class MessageActivity: AppCompatActivity(),
         imageLoader = ImageLoader { imageView: ImageView?, url: String?, payload: Any? ->
             Picasso.get().load(url).into(imageView)
         }
-        var holdersConfig = MessageHolders()
+        val holdersConfig = MessageHolders()
             .setIncomingTextConfig(
                 NewIncomingTextMessageViewHolder::class.java,
                         R.layout.item_custom_incoming_text_message)
@@ -125,7 +179,7 @@ class MessageActivity: AppCompatActivity(),
 
     fun loadMessages() {
         Handler().postDelayed({
-            val messages: ArrayList<Message> = MessagesFixtures().getMessages(lastLoadedDate)
+            messages = MessagesFixtures().getMessages(lastLoadedDate, dialog)
             lastLoadedDate = messages[messages.size - 1].createdAt
             messagesAdapter!!.addToEnd(messages, false)
         }, 1000)
@@ -135,12 +189,12 @@ class MessageActivity: AppCompatActivity(),
         return MessagesListAdapter.Formatter<Message> { message: Message ->
             val createdAt =
                 SimpleDateFormat("MMM d, EEE 'at' h:mm a", Locale.getDefault())
-                    .format(message.getCreatedAt())
-            var text: String = message.getText()
+                    .format(message.getCreatedAt()!!)
+            var text: String = message.getText()!!
             if (text == null) text = "[attachment]"
             java.lang.String.format(
                 Locale.getDefault(), "%s: %s (%s)",
-                message.getUser().getName(), text, createdAt
+                message.getUser()?.getName(), text, createdAt
             )
         }
     }
