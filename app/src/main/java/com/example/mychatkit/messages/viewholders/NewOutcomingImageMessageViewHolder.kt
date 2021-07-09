@@ -1,4 +1,4 @@
-package com.example.mychatkit.messages
+package com.example.mychatkit.messages.viewholders
 
 import android.util.Log
 import android.util.Pair

@@ -18,6 +18,8 @@
         </activity>
         <activity android:name=".messages.MessageActivity">
         </activity>
+        <activity android:name=".header.DialogHeader">
+        </activity>
     </application>
 
 </manifest>

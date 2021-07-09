@@ -29,7 +29,6 @@ class MainActivity: AppCompatActivity(), DialogsListAdapter.OnDialogClickListene
     }
 
     override fun onDialogClick(dialog: Dialog?) {
-        Log.i("MSG", "${dialog?.users}")
         startActivity(
             Intent(
                 applicationContext,

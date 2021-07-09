@@ -10,6 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@id/bubble"
         android:background="@drawable/incoming_bubble_back"
+        android:padding="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp">
@@ -54,7 +55,6 @@
             android:textStyle="bold"
             android:layout_marginStart="4dp"
             app:layout_constraintBottom_toTopOf="@+id/txtQuotedMsgItem"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/viewItem"
             app:layout_constraintTop_toTopOf="parent"
             />
@@ -68,7 +68,6 @@
             android:padding="4dp"
             android:textColor="@color/black"
             android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/viewItem"
             app:layout_constraintTop_toBottomOf="@+id/txtUserItem" />
 
@@ -80,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/message_incoming_bubble_margin_right"
         android:adjustViewBounds="true"
-        android:paddingTop="5dp"
+        android:padding="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reply_layoutItem"
         />
@@ -91,7 +90,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="2dp"
+        android:layout_marginEnd="5dp"
         app:layout_constraintTop_toBottomOf="@+id/image" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

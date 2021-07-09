@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
@@ -77,9 +78,11 @@ class MessageSwipeController(private val context: Context, private val swipeCont
         }
 
         if (mView.translationX < convertTodp(130) || dX < this.dX) {
-            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-            this.dX = dX
-            startTracking = true
+            if (viewHolder.itemViewType != 130) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                this.dX = dX
+                startTracking = true
+            }
         }
         currentItemViewHolder = viewHolder
         drawReplyButton(c)

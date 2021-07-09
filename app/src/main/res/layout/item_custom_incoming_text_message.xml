@@ -33,7 +33,6 @@
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/userName"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/messageText"
             >
 
@@ -55,7 +54,6 @@
                 android:textStyle="bold"
                 android:layout_marginStart="4dp"
                 app:layout_constraintBottom_toTopOf="@+id/txtQuotedMsgItem"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/viewItem"
                 app:layout_constraintTop_toTopOf="parent"
                 />
@@ -69,7 +67,6 @@
                 android:padding="4dp"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/viewItem"
                 app:layout_constraintTop_toBottomOf="@+id/txtUserItem" />
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.example.mychatkit.messages
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
@@ -10,10 +11,14 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.mychatkit.*
+import com.example.mychatkit.header.DialogHeader
+import com.example.mychatkit.messages.viewholders.NewIncomingImageMessageViewHolder
+import com.example.mychatkit.messages.viewholders.NewOutcomingImageMessageViewHolder
 import com.example.mychatkit.model.*
 import com.squareup.picasso.Picasso
 import com.stfalcon.chatkit.commons.ImageLoader
@@ -23,7 +28,6 @@ import com.stfalcon.chatkit.messages.MessageInput.AttachmentsListener
 import com.stfalcon.chatkit.messages.MessageInput.InputListener
 import com.stfalcon.chatkit.messages.MessagesList
 import com.stfalcon.chatkit.messages.MessagesListAdapter
-import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -83,6 +87,19 @@ class MessageActivity: AppCompatActivity(),
 
         findViewById<ImageButton>(R.id.cancelButton).setOnClickListener {
             hideReplyLayout()
+        }
+        supportActionBar?.apply {
+            setCustomView(R.layout.custom_toolbar)
+            setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM)
+            customView.findViewById<TextView>(R.id.title).text = "Dialog"
+        }
+
+        supportActionBar?.customView?.setOnClickListener {
+            startActivity(
+                Intent(
+                    applicationContext,
+                    DialogHeader::class.java
+                    ).apply { putExtra("dialog", dialog) })
         }
 
     }
